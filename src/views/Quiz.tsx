@@ -71,7 +71,6 @@ function Quiz() {
     };
 
     useEffect(() => {
-        console.log('calleed');
         const timerId = setTimeout(() => {
             if (time === 0 && !isFinish) {
                 setIsFinish(true);
@@ -98,9 +97,13 @@ function Quiz() {
             );
             const data: Response = await response.json();
             data.results.forEach((result) => {
-                result.options = result.incorrect_answers
-                    .concat(result.correct_answer)
-                    .sort(() => Math.random() - 0.5);
+                if (result.type === 'multiple') {
+                    result.options = result.incorrect_answers
+                        .concat(result.correct_answer)
+                        .sort(() => Math.random() - 0.5);
+                } else {
+                    result.options = ['True', 'False'];
+                }
             });
             setQuestions(data.results);
         };
@@ -117,19 +120,19 @@ function Quiz() {
             ...answers.slice(questionIndex + 1, answers.length),
         ]);
     };
-
     const handleFinish = () => {
         if (!isFinish) {
             setIsFinish(true);
             setTime(0);
             alert(
-                'You have ' +
+                `You have ${
                     questions
                         .map((question) => {
                             return question.correct_answer;
                         })
-                        .filter((x) => answers.includes(x)).length +
-                    ' correct answer',
+                        .filter((answer, index) => answer === answers[index])
+                        .length
+                } correct answer`,
             );
         } else {
             history.push('/quiz-app');
