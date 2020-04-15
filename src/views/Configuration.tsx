@@ -45,7 +45,7 @@ export default function Configuration() {
         <div className='flex flex-col min-h-screen justify-center md:w-1/2 mx-auto px-2'>
             <div className='py-5 text-center'>Quiz App</div>
             <form className='grid grid-cols-1 row-gap-3' onSubmit={onSubmit}>
-                <label>Amount</label>
+                <label>Number of Questions</label>
                 <input
                     name='amount'
                     ref={register({ required: true, max: 50 })}

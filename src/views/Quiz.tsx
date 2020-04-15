@@ -132,7 +132,7 @@ function Quiz() {
                     ' correct answer',
             );
         } else {
-            history.push('/');
+            history.push('/quiz-app');
         }
     };
 
