@@ -8,7 +8,7 @@ function App() {
         <div className='min-h-screen'>
             <div className='mx-auto bg-gray-100 max-w-screen-lg'>
                 <BrowserRouter>
-                    <Route exact path='/'>
+                    <Route exact path='/quiz-app'>
                         <Configuration />
                     </Route>
                     <Route path='/quiz'>
