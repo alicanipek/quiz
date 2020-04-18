@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
+import { useUser } from '../components/UserContext';
 
 type FormData = {
     amount: string;
@@ -18,8 +19,8 @@ type Category = {
 type Response = {
     trivia_categories: Category[];
 };
-
 export default function Configuration() {
+    const { user, setUser } = useUser()!;
     let history = useHistory();
     const [categories, setCategories] = React.useState<Category[]>([]);
     const { register, handleSubmit, errors } = useForm<FormData>();
@@ -45,6 +46,19 @@ export default function Configuration() {
         <div className='flex flex-col min-h-screen justify-center md:w-1/2 mx-auto px-2'>
             <div className='py-5 text-center'>Quiz App</div>
             <form className='grid grid-cols-1 row-gap-3' onSubmit={onSubmit}>
+                <label>Your Name</label>
+                <input
+                    name='name'
+                    ref={register({ required: true, max: 50 })}
+                    type='text'
+                    className={clsx(
+                        'border border-black border-solid px-3 py-4 h-12 rounded-md text-base',
+                        errors.amount &&
+                            'border-red-300 focus:border-red-600 focus:shadow-outline-red',
+                    )}
+                    value={user}
+                    onChange={(e) => setUser(e.target.value)}
+                />
                 <label>Number of Questions</label>
                 <input
                     name='amount'

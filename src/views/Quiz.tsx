@@ -4,6 +4,7 @@ import { Transition } from 'react-transition-group';
 import { TransitionStatus } from 'react-transition-group/Transition';
 import QuestionOption from '../components/QuestionOption';
 import he from 'he';
+import { useUser } from '../components/UserContext';
 
 const duration = 200;
 
@@ -38,6 +39,7 @@ type Response = {
 };
 
 function Quiz() {
+    const { user } = useUser()!;
     let location = useLocation();
     let history = useHistory();
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -75,20 +77,23 @@ function Quiz() {
             if (time === 0 && !isFinish) {
                 setIsFinish(true);
                 alert(
-                    'You have ' +
-                        questions
-                            .map((question) => {
-                                return question.correct_answer;
-                            })
-                            .filter((x) => answers.includes(x)).length +
-                        ' correct answer',
+                    `${user} 
+                         have 
+                        ${
+                            questions
+                                .map((question) => {
+                                    return question.correct_answer;
+                                })
+                                .filter((x) => answers.includes(x)).length
+                        }
+                         correct answer`,
                 );
             } else if (time > 0) {
                 setTime(time - 1);
             }
         }, 1000);
         return () => clearTimeout(timerId);
-    }, [time, answers, questions, isFinish]);
+    }, [time, answers, questions, isFinish, user]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -125,7 +130,7 @@ function Quiz() {
             setIsFinish(true);
             setTime(0);
             alert(
-                `You have ${
+                `${user} have ${
                     questions
                         .map((question) => {
                             return question.correct_answer;
