@@ -155,7 +155,7 @@ function Quiz() {
             </div>
             <div
                 key={index}
-                className='flex flex-col bg-gray-200 p-3 my-3 rounded-md h-48 text-lg text-center justify-center text-2xl font-extrabold text-gray-800'
+                className='flex flex-col bg-gray-200 p-3 my-3 rounded-md h-48 text-lg text-center justify-center font-extrabold text-gray-800'
             >
                 {he.decode(question.question)}
             </div>
