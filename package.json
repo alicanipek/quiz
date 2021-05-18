@@ -19,7 +19,7 @@
         "gh-pages": "^2.2.0",
         "he": "^1.2.0",
         "node-forge": "^0.10.0",
-        "lodash": "^4.17.19",
+        "lodash": "^4.17.21",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-hook-form": "^5.2.0",
