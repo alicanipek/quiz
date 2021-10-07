@@ -1,8 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
+import Result from './components/Result';
+import UserContextProvider from './components/UserContext';
 import Configuration from './views/Configuration';
 import Quiz from './views/Quiz';
-import UserContextProvider from './components/UserContext';
 
 function App() {
     return (
@@ -15,6 +16,9 @@ function App() {
                         </Route>
                         <Route exact path='/quiz-app'>
                             <Configuration />
+                        </Route>
+                        <Route path='/result'>
+                            <Result />
                         </Route>
                         <Route path='/quiz'>
                             <Quiz />

@@ -1,9 +1,9 @@
+import he from 'he';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Transition } from 'react-transition-group';
 import { TransitionStatus } from 'react-transition-group/Transition';
 import QuestionOption from '../components/QuestionOption';
-import he from 'he';
 import { useUser } from '../components/UserContext';
 
 const duration = 200;
@@ -48,7 +48,7 @@ function Quiz() {
     const [isFinish, setIsFinish] = useState<boolean>(false);
     const [show, setShow] = React.useState(true);
     const [direction, setDirection] = React.useState('');
-    const [time, setTime] = useState(10);
+    const [time, setTime] = useState(90);
     const handleClick = (dir: string) => {
         if (
             (dir === 'dec' && questionIndex === 0) ||
@@ -60,7 +60,7 @@ function Quiz() {
     };
     const onExited = () => {
         setShow(true);
-        if (!isFinish) setTime(10);
+        if (!isFinish) setTime(90);
         if (direction === 'inc')
             setQuestionIndex(
                 questionIndex === questions.length - 1
@@ -76,24 +76,20 @@ function Quiz() {
         const timerId = setTimeout(() => {
             if (time === 0 && !isFinish) {
                 setIsFinish(true);
-                alert(
-                    `${user} 
-                         have 
-                        ${
-                            questions
-                                .map((question) => {
-                                    return question.correct_answer;
-                                })
-                                .filter((x) => answers.includes(x)).length
-                        }
-                         correct answer`,
+                history.push(
+                    '/result?correct=' +
+                        questions
+                            .map((question) => {
+                                return question.correct_answer;
+                            })
+                            .filter((x) => answers.includes(x)).length,
                 );
             } else if (time > 0) {
                 setTime(time - 1);
             }
         }, 1000);
         return () => clearTimeout(timerId);
-    }, [time, answers, questions, isFinish, user]);
+    }, [time, answers, questions, isFinish, user, history]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -129,15 +125,15 @@ function Quiz() {
         if (!isFinish) {
             setIsFinish(true);
             setTime(0);
-            alert(
-                `${user} have ${
+
+            history.push(
+                '/result?correct=' +
                     questions
                         .map((question) => {
                             return question.correct_answer;
                         })
                         .filter((answer, index) => answer === answers[index])
-                        .length
-                } correct answer`,
+                        .length,
             );
         } else {
             history.push('/quiz-app');
