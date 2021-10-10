@@ -4,7 +4,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { Transition } from 'react-transition-group';
 import { TransitionStatus } from 'react-transition-group/Transition';
 import QuestionOption from '../components/QuestionOption';
-import { useUser } from '../components/UserContext';
 
 const duration = 200;
 
@@ -31,6 +30,7 @@ type Question = {
     correct_answer: string;
     incorrect_answers: string[];
     options: string[];
+    time: number;
 };
 
 type Response = {
@@ -39,7 +39,6 @@ type Response = {
 };
 
 function Quiz() {
-    const { user } = useUser()!;
     let location = useLocation();
     let history = useHistory();
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -74,7 +73,7 @@ function Quiz() {
 
     useEffect(() => {
         const timerId = setTimeout(() => {
-            if (time === 0 && !isFinish) {
+            if (questions[questionIndex].time === 0 && !isFinish) {
                 setIsFinish(true);
                 history.push(
                     '/result?correct=' +
@@ -84,12 +83,14 @@ function Quiz() {
                             })
                             .filter((x) => answers.includes(x)).length,
                 );
-            } else if (time > 0) {
-                setTime(time - 1);
+            } else if (questions[questionIndex].time > 0) {
+                questions[questionIndex].time =
+                    questions[questionIndex].time - 1;
+                setTime(questions[questionIndex].time);
             }
         }, 1000);
         return () => clearTimeout(timerId);
-    }, [time, answers, questions, isFinish, user, history]);
+    }, [answers, time, questions, isFinish, history, questionIndex]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -102,8 +103,10 @@ function Quiz() {
                     result.options = result.incorrect_answers
                         .concat(result.correct_answer)
                         .sort(() => Math.random() - 0.5);
+                    result.time = 90;
                 } else {
                     result.options = ['True', 'False'];
+                    result.time = 90;
                 }
             });
             setQuestions(data.results);
@@ -147,7 +150,7 @@ function Quiz() {
                     {questionIndex + 1} / {questions.length}
                 </div>
                 <div className='ext-center'>{question.category}</div>
-                <div className='text-right w-10 pr-5'>{time}</div>
+                <div className='text-right w-10 pr-5'>{question.time}</div>
             </div>
             <div
                 key={index}
