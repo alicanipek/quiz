@@ -1,10 +1,11 @@
+import clsx from 'clsx';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
-import clsx from 'clsx';
 import { useUser } from '../components/UserContext';
 
 type FormData = {
+    name: string;
     amount: string;
     category: string;
     difficulty: string;
@@ -53,7 +54,7 @@ export default function Configuration() {
                     type='text'
                     className={clsx(
                         'border border-black border-solid px-3 py-4 h-12 rounded-md text-base',
-                        errors.amount &&
+                        errors.name &&
                             'border-red-300 focus:border-red-600 focus:shadow-outline-red',
                     )}
                     value={user}
