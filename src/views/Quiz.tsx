@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Transition } from 'react-transition-group';
 import { TransitionStatus } from 'react-transition-group/Transition';
-import QuestionOption from '../components/QuestionOption';
+import Footer from '../components/Footer';
+import QuestionHeader from '../components/QuestionHeader';
+import QuestionOptions from '../components/QuestionOptions';
 
 const duration = 200;
 
@@ -145,30 +147,25 @@ function Quiz() {
 
     let questionOnPage = questions.map((question, index) => (
         <React.Fragment key={index}>
-            <div className='flex flex-row items-center justify-between mb-3 bg-gray-900 text-white h-12 md:rounded-md'>
-                <div className='text-left pl-5'>
-                    {questionIndex + 1} / {questions.length}
-                </div>
-                <div className='ext-center'>{question.category}</div>
-                <div className='text-right w-10 pr-5'>{question.time}</div>
-            </div>
+            <QuestionHeader
+                questionIndex={questionIndex + 1}
+                totalQuestions={questions.length}
+                category={question.category}
+                time={question.time}
+            />
             <div
                 key={index}
                 className='flex flex-col bg-gray-200 p-3 my-3 rounded-md h-48 text-lg text-center justify-center font-extrabold text-gray-800'
             >
                 {he.decode(question.question)}
             </div>
-            <div className='flex flex-col justify-between mb-3'>
-                {question.options.map((option, i) => (
-                    <QuestionOption
-                        key={i}
-                        text={option}
-                        selected={option === answers[questionIndex]}
-                        isTrue={isFinish && option === question.correct_answer}
-                        onClick={handleOptionClick}
-                    />
-                ))}
-            </div>
+            <QuestionOptions
+                answer={answers[questionIndex]}
+                correct_answer={question.correct_answer}
+                options={question.options}
+                onClick={handleOptionClick}
+                isFinish={isFinish}
+            />
         </React.Fragment>
     ));
 
@@ -188,28 +185,11 @@ function Quiz() {
                     </div>
                 )}
             </Transition>
-            <div className='flex flex-row justify-between items-center'>
-                <button
-                    type='button'
-                    className='w-1/3 flex-grow h-12 bg-gray-500 hover:bg-gray-400 md: rounded-md'
-                    onClick={() => handleClick('dec')}
-                >
-                    {'Previous'}
-                </button>
-                <button
-                    type='button'
-                    className='w-1/3 mx-1 flex-grow h-12 text-white bg-indigo-500 hover:bg-indigo-400 focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-700 md: rounded-md'
-                    onClick={handleFinish}
-                >
-                    {!isFinish ? 'Finish Quiz' : 'Restart Quiz'}
-                </button>
-                <button
-                    className='w-1/3 flex-grow h-12 bg-gray-500 hover:bg-gray-400 md: rounded-md'
-                    onClick={() => handleClick('inc')}
-                >
-                    {'Next'}
-                </button>
-            </div>
+            <Footer
+                handleClick={handleClick}
+                handleFinish={handleFinish}
+                isFinish={isFinish}
+            />
         </div>
     );
 }
